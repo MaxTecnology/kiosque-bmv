@@ -1,0 +1,183 @@
+/*
+ 
+=================================================
+      RTL Styling Code
+=================================================
+*/
+
+[dir="rtl"] {
+    .end {
+        margin-left: 0 !important;
+        margin-right: auto !important;
+    }
+
+    .owl-carousel,
+    .bx-wrapper {
+        direction: ltr;
+    }
+
+    .owl-carousel .owl-item {
+        direction: rtl;
+    }
+
+    .text-start {
+        text-align: right !important;
+    }
+
+    .text-end {
+        text-align: left !important;
+    }
+
+    form {
+        .form-group {
+
+            input {
+                &[type="tel"] {
+                    text-align: right !important;
+                }
+            }
+
+            .input_box select {
+                margin-right: 0px !important;
+                margin-left: 15px !important;
+                padding-left: 0px !important;
+                padding-right: 15px;
+                background-position-x: left !important;
+            }
+
+            .form-check {
+                padding-left: 0 !important;
+                padding-right: 25px !important;
+
+                &.checkbox {
+                    input.form-check-input {
+                        left: unset !important;
+                        right: 0 !important;
+                    }
+                }
+            }
+        }
+    }
+
+    app-dashboard {
+        .card.bestSellingItems .media .img_box {
+            margin-right: 0 !important;
+            margin-left: 15px !important;
+        }
+    }
+
+    .sideMenu {
+        left: unset !important;
+        right: 0 !important;
+    }
+
+    .body_wrapper {
+        margin-left: 0 !important;
+        margin-right: auto !important;
+    }
+
+    ngb-modal-window {
+        &.sideModel {
+            .modal-dialog .modal-content {
+                right: unset !important;
+                left: -100% !important;
+            }
+
+            &.show {
+                .modal-dialog .modal-content {
+                    left: 0 !important;
+                }
+            }
+        }
+    }
+
+    app-dashboard {
+        .card .chart-area .graph_container {
+            .text_container {
+                padding-left: 0 !important;
+                padding-right: 13px !important;
+
+                p::before {
+                    left: 0 !important;
+                    right: unset !important;
+                }
+            }
+        }
+    }
+
+    app-setting {
+        .qr_code_popup .qr_code_popup_inner .popup-close-button {
+            left: unset !important;
+            right: -8px !important;
+        }
+    }
+
+    app-transactions {
+        ngb-modal-window .modal-dialog {
+            .modalClose {
+                margin-right: 0 !important;
+                margin-left: 15px !important;
+            }
+
+
+            .chat_container .chat_box {
+                &.send {
+                    margin-left: 0 !important;
+                    margin-right: auto !important;
+
+                    .chat {
+                        margin-left: 0 !important;
+                        margin-right: auto !important;
+
+                        h2 {
+                            text-align: left !important;
+                        }
+
+                        p {
+                            text-align: left !important;
+                        }
+                    }
+                }
+            }
+
+            .modelContainer {
+                .modelHeader .pageTitle .img_box {
+                    margin-right: 0 !important;
+                    margin-left: 15px !important;
+                }
+
+                .deliveryInfo .delivery_partner .img_box {
+                    margin-right: 0 !important;
+                    margin-left: 15px !important;
+                }
+            }
+        }
+    }
+
+    app-confirmation-dialog {
+        .modal-content .modal-footer button.btn :nth-child(2)::after {
+            left: unset !important;
+            right: 0 !important;
+        }
+    }
+
+    @media (min-width: 992px) {
+
+        app-home {
+            .mainRow {
+                .itemsCol {
+                    padding: 10px 10px 10px 0px !important;
+
+                    .pe-lg-3 {
+                        padding-right: 0rem !important;
+                        padding-left: 1rem !important;
+                    }
+                }
+            }
+
+        }
+    }
+
+
+
+}

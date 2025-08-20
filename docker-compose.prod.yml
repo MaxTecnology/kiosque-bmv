@@ -1,0 +1,182 @@
+services:
+  # Aplicação PHP-FPM para Produção
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        user: laravel
+        uid: 1000
+    container_name: hungerz_app_prod
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - hungerz_prod
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+
+  # Nginx Web Server com SSL
+  webserver:
+    image: nginx:alpine
+    container_name: hungerz_webserver_prod
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx-prod:/etc/nginx/conf.d
+      - ./docker/certbot/conf:/etc/letsencrypt
+      - ./docker/certbot/www:/var/www/certbot
+    networks:
+      - hungerz_prod
+    depends_on:
+      - app
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  # Certbot para SSL
+  certbot:
+    image: certbot/certbot
+    container_name: hungerz_certbot
+    restart: unless-stopped
+    volumes:
+      - ./docker/certbot/conf:/etc/letsencrypt
+      - ./docker/certbot/www:/var/www/certbot
+    networks:
+      - hungerz_prod
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  # MySQL Database para Produção
+  db:
+    image: mysql:8.0
+    container_name: hungerz_db_prod
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: hungerz
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_prod_password}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-laravel_prod_password}
+      MYSQL_USER: ${DB_USERNAME:-laravel}
+      SERVICE_TAGS: prod
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata_prod:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      # Backup automático
+      - ./backups:/backups
+    networks:
+      - hungerz_prod
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 40s
+
+  # Redis Cache para Produção
+  redis:
+    image: redis:alpine
+    container_name: hungerz_redis_prod
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_prod:/data
+    networks:
+      - hungerz_prod
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_prod_password}
+
+  # Queue Worker para Produção
+  queue:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        user: laravel
+        uid: 1000
+    container_name: hungerz_queue_prod
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    command: sh -c "sleep 60 && php artisan queue:work --verbose --tries=3 --timeout=90 --sleep=3 --max-jobs=1000"
+    networks:
+      - hungerz_prod
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      app:
+        condition: service_started
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+
+  # Scheduler para tarefas cron
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        user: laravel
+        uid: 1000
+    container_name: hungerz_scheduler_prod
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    command: sh -c "sleep 60 && while [ true ]; do php artisan schedule:run --verbose --no-interaction & sleep 60; done"
+    networks:
+      - hungerz_prod
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      app:
+        condition: service_started
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+
+  # Monitoramento - Watchtower (opcional)
+  watchtower:
+    image: containrrr/watchtower
+    container_name: hungerz_watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=3600 # Check every hour
+      - WATCHTOWER_INCLUDE_STOPPED=true
+    networks:
+      - hungerz_prod
+
+# Docker Networks para Produção
+networks:
+  hungerz_prod:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volumes para Produção
+volumes:
+  dbdata_prod:
+    driver: local
+  redis_data_prod:
+    driver: local

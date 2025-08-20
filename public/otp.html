@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<head>
+    <title>Enter Code</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- custom CSS -->
+    <link href="css/style.css" type="text/css" rel="stylesheet">
+    <!-- Font CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,500i,700,900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="sign-in-button"></div>
+  <div class="container">
+        <header>
+            <div class="title">
+                <h2>Enter the code <br>you received</h2>
+            </div>
+        </header>
+
+        <div class="containt">
+            <form>
+                <input type="text" class="form-control bodder-0" id="code" placeholder="Enter code">
+            </form>
+        </div>
+        
+        <footer>
+            <button type="button" class="btn btn-success btn-lg btn-block" onclick="verify()">Verify OTP</button>
+            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="verify()" style="display: none;" id="resend-button">Resend OTP</button>
+        </footer>
+    </div>
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+  crossorigin="anonymous"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-auth.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+ https://firebase.google.com/docs/web/setup#config-web-app -->
+ 
+ <script>
+  setupResendButton();
+
+  var phoneNumber = '+' + getUrlParameter('mobile');
+
+  var result = getUrlParameter('result'); // so that code don't run when we reload
+
+  if(!result) {
+
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+	    apiKey: "AIzaSyBgrfaJcxpckzQtyOGLAuOBUTWmHMk9dNs",
+      authDomain: "faztudo-d1757.firebaseapp.com",
+      databaseURL: "https://faztudo-d1757.firebaseio.com",
+      projectId: "faztudo-d1757",
+      storageBucket: "faztudo-d1757.appspot.com",
+      messagingSenderId: "837488929003",
+      appId: "1:837488929003:web:e30861d6b47ef8dc"
+    };
+
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);  
+    
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+      'size': 'invisible',
+      'callback': function(response) {
+      // reCAPTCHA solved, allow signInWithPhoneNumber.
+      //onSignInSubmit();
+    }
+    });
+    
+    var appVerifier = window.recaptchaVerifier;
+
+    firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+    .then(function (confirmationResult) {
+        // SMS sent. Prompt user to type the code from the message, then sign the
+        // user in with confirmationResult.confirm(code).
+        window.confirmationResult = confirmationResult;      
+      }).catch(function (error) {
+        window.recaptchaVerifier.render().then(function(widgetId) {
+          grecaptcha.reset(widgetId);
+        });
+	       console.log(error);
+        window.location = window.location.href + '&result=failed';
+      });
+  }
+
+    // verify code entered by user
+  function verify() {
+    code = $("#code").val();
+    if(!code) {
+      alert("Enter OTP");
+      return;
+    }
+    confirmationResult.confirm(code).then(function (result) {
+      // User signed in successfully.
+      var user = result.user;
+      user.getIdToken().then(function(idToken){ 
+              window.location = window.location.href + '&result=success&token=' + idToken;
+      });
+    }).catch(function (error) {
+      console.log("after");
+      console.log(error);
+      window.location = window.location.href + '&result=failed';
+    });
+  }
+
+  function setupResendButton() {
+    setTimeout(function() {
+      $("#resend-button").show();
+    }, 120*1000);
+  }
+
+  function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  }
+</script>
+</body>
+</html>

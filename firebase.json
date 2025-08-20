@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "14234954662",
+    "firebase_url": "https://bestmaistotem-default-rtdb.firebaseio.com",
+    "project_id": "bestmaistotem",
+    "storage_bucket": "bestmaistotem.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14234954662:android:0f188d62128954b8713d67",
+        "android_client_info": {
+          "package_name": "com.bestmais.totem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14234954662-4osmi3h9aia37qdtc5o7br9cqb8rb461.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bestmais.totem",
+            "certificate_hash": "e355c2e8c156faac85e27ac1c77c21159fa5db07"
+          }
+        },
+        {
+          "client_id": "14234954662-m2586boe3t023jqmbqqck4l04h73qasu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHzvqL0B9g7asx5Vt0uVDf9UFl4sTyhLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14234954662-m2586boe3t023jqmbqqck4l04h73qasu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

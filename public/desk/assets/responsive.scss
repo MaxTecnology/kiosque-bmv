@@ -1,0 +1,207 @@
+@media (min-width: 576px) {}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+    .body_wrapper {
+        width: calc(100% - 220px) !important;
+    }
+
+    .sideMenu {
+        max-width: 220px !important;
+        min-width: 220px !important;
+
+        ul li {
+            a {
+                display: block !important;
+            }
+
+            .icon_box {
+                img {
+                    margin: 0 !important;
+                }
+
+            }
+        }
+    }
+
+    ngb-modal-window.sideModel .modal-dialog .modal-content {
+        max-width: 350px;
+    }
+
+    ngb-modal-window.sideModel.itemInfoModal .modal-dialog .modal-content {
+        max-width: 300px;
+    }
+
+    app-home {
+        .mainRow {
+            max-height: calc(100vh - 31px - 10px);
+            overflow: hidden;
+            overflow-y: auto;
+            padding-bottom: 0 !important;
+
+            .cart {
+                min-height: calc(100vh - 70px);
+                position: sticky;
+                top: 0px;
+
+                .cartCantent {
+                    min-height: calc(100vh - 148px);
+                    max-height: calc(100vh - 148px);
+                    overflow: hidden;
+                    overflow-y: auto;
+                    padding-bottom: 100px;
+
+                    .payment_info {
+                        position: absolute;
+                        width: 100%;
+                        z-index: 99;
+                        left: 0;
+                        bottom: 75px;
+                    }
+                }
+
+                .cart_footer {
+                    //  position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                }
+            }
+        }
+
+    }
+
+    app-verification,
+    app-login {
+        .body-inner .row .col-12 {
+            .banner {
+                position: relative !important;
+                z-index: 99 !important;
+                height: 100vh !important;
+                overflow: hidden !important;
+                display: flex !important;
+                align-items: flex-end !important;
+                flex-wrap: wrap !important;
+
+                .content_bg {
+                    display: none !important;
+                }
+
+                .logo {
+                    min-width: 100% !important;
+                    position: relative !important;
+                    top: 3% !important;
+                }
+
+                .banner_img {
+                    width: 100% !important;
+                    margin: 0 auto !important;
+                    min-width: 100% !important;
+
+                    img {
+                        max-height: 350px !important;
+                        max-width: 100% !important;
+                        position: relative !important;
+                        top: -20px !important;
+                    }
+                }
+            }
+
+            form {
+                min-height: calc(100vh - 0px) !important;
+                display: flex !important;
+                align-items: center !important;
+
+                .form_inner {
+                    padding: 0 !important;
+                    margin-top: -20% !important;
+                }
+            }
+
+
+        }
+    }
+
+    ngb-modal-window.orderInfoModel {
+        .modal-dialog {
+            .modal-content {
+                display: flex;
+                align-items: flex-start;
+                max-width: 350px;
+                flex-wrap: wrap;
+
+                .modelContainer {
+                    width: 350px !important;
+                    max-width: 350px;
+                    min-width: 350px;
+
+                    &.chatContainer {
+                        position: relative;
+                        top: 0;
+                    }
+
+                }
+
+            }
+
+            &.orderInfoShow {
+                .modal-content {
+                    max-width: 700px;
+                }
+            }
+
+            &.deliveryInfoShow {
+                .modal-content {
+                    max-width: 700px;
+                }
+            }
+        }
+    }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+
+    app-home {
+        .mainRow {
+            max-height: calc(100vh - 31px - 34px);
+            overflow: hidden;
+            overflow-y: auto;
+            padding: 0;
+            margin: 0 -10px !important;
+
+            .cart {
+                min-height: calc(100vh - 85px);
+                max-height: calc(100vh - 85px);
+                position: sticky;
+                overflow: hidden;
+                overflow-y: auto;
+                top: 0;
+
+                .cartCantent {
+                    min-height: calc(100vh - 163px);
+                    max-height: calc(100vh - 163px);
+                }
+            }
+
+            .cartCol {
+                padding: 10px 10px 0px 30px !important;
+            }
+
+            .itemsCol {
+                padding: 10px 0px 10px 10px !important;
+            }
+
+        }
+
+    }
+}
+
+// X-Large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {}
+
+// XX-Large devices (larger desktops, 1400px and up)
+@media (min-width: 1400px) {}
+
+// XX-Large devices (larger desktops, 1400px and up)
+@media (min-width: 2000px) {}

@@ -1,0 +1,9 @@
+{
+    "appName": "Hungerz",
+    "apiBaseUrl": "https://hungerz.vtlabs.dev/api/admin",
+    "mapsApiKey": "AIzaSyBCjJGTp__kOJb2mMUsBeKQkuOlwbiJipQ",
+    "developerName": "BMV",
+    "developerUrl": "https://bmv.com.br/",
+    "defaultCategoryScope": "ecommerce",
+    "defaultBannerScope": "ecommerce"
+}

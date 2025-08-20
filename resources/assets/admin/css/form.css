@@ -1,0 +1,10 @@
+.select_box {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    height: 32px;
+    padding: 8px;
+}

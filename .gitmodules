@@ -1,0 +1,7 @@
+[submodule "public/admin"]
+	path = public/admin
+	url = https://ujjwal1991@gitlab.com/verbosetech/hungerz-admin-compiled
+	branch = a18
+[submodule "public/desk"]
+	path = public/desk
+	url = https://ujjwal1991@gitlab.com/verbosetech/hungerz-desk-compiled.git
