@@ -24,6 +24,7 @@ public/assets
 public/mix-manifest.json
 
 .env
+.env.production
 .env.*.php
 .env.php
 .sass-cache

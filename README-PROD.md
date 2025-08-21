@@ -45,6 +45,8 @@ chmod +x setup-prod.sh
 
 # Executar instalação (substitua pelo seu domínio)
 sudo ./setup-prod.sh hungerz.com admin@hungerz.com
+
+sudo ./setup-prod.sh betania.nuuque.com.br admin@betania.nuuque.com.br
 ```
 
 O script irá:

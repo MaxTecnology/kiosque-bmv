@@ -260,9 +260,24 @@ if [ $attempt -gt $max_attempts ]; then
     exit 1
 fi
 
-# Instalar dependências de produção
+# Criar diretórios necessários do Laravel se não existirem
+echo "📁 Criando diretórios necessários..."
+mkdir -p storage/app/public
+mkdir -p storage/framework/cache
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/testing
+mkdir -p storage/framework/views
+mkdir -p storage/logs
+mkdir -p bootstrap/cache
+
+# Configurar permissões básicas antes do composer
+echo "🔒 Configurando permissões básicas..."
+chmod -R 755 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+
+# Instalar dependências de produção com permissões corretas
 echo "📦 Instalando dependências do Composer para produção..."
-docker-compose -f docker-compose.prod.yml exec -T app composer install --no-dev --optimize-autoloader
+docker-compose -f docker-compose.prod.yml exec -T --user root app composer install --no-dev --optimize-autoloader
 
 # Executar migrations
 echo "🗃️ Executando migrations..."
@@ -274,9 +289,15 @@ if docker-compose -f docker-compose.prod.yml exec -T app php artisan db:seed --f
     echo "✅ Seeders executados"
 fi
 
-# Configurar permissões
-echo "🔒 Configurando permissões..."
+# Configurar permissões finais
+echo "🔒 Configurando permissões finais..."
 docker-compose -f docker-compose.prod.yml exec -T --user root app chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+docker-compose -f docker-compose.prod.yml exec -T --user root app chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+docker-compose -f docker-compose.prod.yml exec -T --user root app chmod -R 755 /var/www/public
+
+# Criar link do storage se não existir
+echo "🔗 Configurando link do storage..."
+docker-compose -f docker-compose.prod.yml exec -T app php artisan storage:link || echo "⚠️ Storage link já existe ou erro"
 
 # Cache de produção
 echo "⚡ Configurando cache de produção..."
